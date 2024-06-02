@@ -6,7 +6,10 @@ const {
   forgetPassword,
   sendResetPasswordTokenStatus,
   resetPassword,
-  signIn
+  signIn,
+  saveMovie,
+  unSaveMovie,
+  userDetails
 } = require("../controllers/user")
 const { isAuth } = require("../middlewares/auth")
 const { isValidPassResetToken } = require("../middlewares/user")
@@ -44,9 +47,14 @@ router.get("/is-auth", isAuth, (req, res) => {
       name: user.name,
       email: user.email,
       isVerified: user.isVerified,
-      role: user.role
+      role: user.role,
+      saved: user.saved
     }
   })
 })
+router.get("/userDetails", isAuth, userDetails)
+
+router.put("/saveMovie", isAuth, saveMovie)
+router.put("/unSaveMovie", isAuth, unSaveMovie)
 
 module.exports = router
