@@ -219,7 +219,7 @@ exports.updateMovie = async (req, res) => {
   if (file) {
     // removing poster from cloud if there is any.
     const posterID = movie.poster?.public_id
-    console.log(posterID)
+
     if (posterID) {
       const { result } = await cloudinary.uploader.destroy(posterID)
       if (result !== "ok") {
@@ -391,7 +391,9 @@ exports.getLatestUploads = async (req, res) => {
       storyLine: m.storyLine,
       poster: m.poster?.url,
       responsivePosters: m.poster.responsive,
-      trailer: m.trailer?.url
+      trailer: m.trailer?.url,
+      genres: m.genres,
+      type: m.type
     }
   })
   res.json({ movies })
@@ -412,12 +414,12 @@ exports.getSingleMovie = async (req, res) => {
     averageRatingPipeline(movie._id)
   )
 
-  const reviews = {}
+  const reviewsNo = {}
 
   if (aggregatedResponse) {
     const { ratingAvg, reviewCount } = aggregatedResponse
-    reviews.ratingAvg = parseFloat(ratingAvg).toFixed(1)
-    reviews.reviewCount = reviewCount
+    reviewsNo.ratingAvg = parseFloat(ratingAvg).toFixed(1)
+    reviewsNo.reviewCount = reviewCount
   }
 
   const {
@@ -433,7 +435,8 @@ exports.getSingleMovie = async (req, res) => {
     language,
     poster,
     trailer,
-    type
+    type,
+    reviews
   } = movie
 
   res.json({
@@ -466,7 +469,8 @@ exports.getSingleMovie = async (req, res) => {
         id: director._id,
         name: director.name
       },
-      reviews: { ...reviews }
+      reviewsNo: { ...reviewsNo },
+      reviews
     }
   })
 }
@@ -550,7 +554,6 @@ exports.searchPublicMovies = async (req, res) => {
 
 exports.getAllMovies = async (req, res) => {
   const movies = await Movie.find({})
-
   const results = movies.map((movie) => ({
     id: movie._id,
     title: movie.title,

@@ -1,76 +1,76 @@
-const mongoose = require("mongoose");
-const genres = require("../utils/genres");
+const mongoose = require("mongoose")
+const genres = require("../utils/genres")
 
 const movieSchema = mongoose.Schema(
   {
     title: {
       type: String,
       trim: true,
-      required: true,
+      required: true
     },
     storyLine: {
       type: String,
       trim: true,
-      required: true,
+      required: true
     },
     director: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Actor",
+      ref: "Actor"
     },
     releseDate: {
       type: Date,
-      required: true,
+      required: true
     },
     status: {
       type: String,
       required: true,
-      enum: ["public", "private"],
+      enum: ["public", "private"]
     },
     type: {
       type: String,
-      required: true,
+      required: true
     },
     genres: {
       type: [String],
       required: true,
-      enum: genres,
+      enum: genres
     },
     tags: {
       type: [String],
-      required: true,
+      required: true
     },
     cast: [
       {
         actor: { type: mongoose.Schema.Types.ObjectId, ref: "Actor" },
         roleAs: String,
-        leadActor: Boolean,
-      },
+        leadActor: Boolean
+      }
     ],
     writers: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Actor",
-      },
+        ref: "Actor"
+      }
     ],
     poster: {
       type: Object,
       url: { type: String, required: true },
       public_id: { type: String, required: true },
-      responsive: [URL],
+      responsive: [URL]
     },
     trailer: {
       type: Object,
       url: { type: String, required: true },
       public_id: { type: String, required: true },
-      required: true,
+      required: true
     },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
     language: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   { timestamps: true }
-);
+)
 
-module.exports = mongoose.model("Movie", movieSchema);
+module.exports = mongoose.model("Movie", movieSchema)
